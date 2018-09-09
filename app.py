@@ -1,6 +1,6 @@
 from flask import *
 from face import Face
-
+from models.feedback import Feedback
 import mlab
 mlab.connect()
 app=Flask(__name__)
@@ -16,7 +16,7 @@ def home():
         cheek = int(form['Do_rong_giua_2_ben_go_ma'])
         jawbone = int(form['Do_rong_xuong_ham'])
         def almost(a,b):
-            if abs(a-b)<=2.5:
+            if abs(a-b)<=3:
                 return True
             else:
                 return False
@@ -56,7 +56,14 @@ def home():
             return render_template('triangle.html')
         else:
             print('error')
-   
+@app.route('/comment')
+def feedback():
+    mlab.connect()
+    feedback_list = Feedback.objects(post = True)
+    print(feedback_list)
+    return render_template('comment.html',feedback_list = feedback_list)
+
+
         
         
 
@@ -68,5 +75,5 @@ def home():
 
     
 
-if __name__=='__main__':
-    app.run(debug=True)
+# if __name__=='__main__':
+#     app.run(debug=True)
